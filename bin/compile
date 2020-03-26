@@ -184,6 +184,8 @@ if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
     echo "-----> Could not find prebuilt GHC $GHC_VER"
     if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
       GHC_URL="https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz"
+
+      GHC_URL="https://downloads.haskell.org/~ghc/8.2.2/ghc-8.2.2-x86_64-deb8-linux.tar.xz"
       echo "-----> Downloading GHC $GHC_URL"
       curl -# -L "$GHC_URL" -o $CACHE_DIR/download/ghc.tar.xz
       tar xz $CACHE_DIR/download/ghc.tar.xz -C $CACHE_DIR/download
