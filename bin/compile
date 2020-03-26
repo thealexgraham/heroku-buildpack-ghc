@@ -144,132 +144,131 @@ function set-default-env (){
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
 }
 
-# mkdir -p $WORKING_HOME/vendor/ghc-libs
-# mkdir -p $WORKING_HOME/vendor/ghc-utils
-# mkdir -p $WORKING_HOME/vendor/ghc-includes
-# echo "-----> Linking libncurses.so in an accessible place"
-# ln -s /usr/lib/libncurses.so.5 $WORKING_HOME/vendor/ghc-libs/libtinfo.so.5
-#
-# LIBFFI_URL="ftp://sourceware.org/pub/libffi/libffi-3.0.13.tar.gz"
-# install_prebuilt_library "libffi" "3.0.13" $LIBFFI_URL "libffi-3.0.13" "--enable-static=no"
-# if [ -e $CACHE_DIR/libffi-3.0.13/libs ]; then
-#   echo "-----> Move libffi files into the correct locations" # See https://github.com/atgreen/libffi/issues/55 & https://github.com/atgreen/libffi/issues/24
-#   rm -rf $CACHE_DIR/libffi-3.0.13/ghc-libs/*
-#   mv $CACHE_DIR/libffi-3.0.13/libs/*.so* $CACHE_DIR/libffi-3.0.13/ghc-libs/
-#   mv $CACHE_DIR/libffi-3.0.13/libs/*.h $CACHE_DIR/libffi-3.0.13/ghc-includes/
-#   cp $CACHE_DIR/libffi-3.0.13/ghc-libs/* $WORKING_HOME/vendor/ghc-libs/
-#   cp $CACHE_DIR/libffi-3.0.13/ghc-includes/* $WORKING_HOME/vendor/ghc-includes/
-#   rm -rf $CACHE_DIR/libffi-3.0.13/libs
-# fi
-#
-# LIBPCRE_URL="http://iweb.dl.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.gz"
-# install_prebuilt_library "libpcre" "8.35" $LIBPCRE_URL "pcre-8.35" "--enable-silent-rules --enable-static=no --disable-cpp"
-#
-# LIBGMP_URL="https://gmplib.org/download/gmp/gmp-6.0.0a.tar.bz2"
-# install_prebuilt_library "libgmp" "6.0.0a" $LIBGMP_URL "gmp-6.0.0"
-#
-# export LANG=en_US.UTF-8
-# export C_INCLUDE_PATH=$WORKING_HOME/vendor/ghc-includes:/usr/include:$C_INCLUDE_PATH
-# export LIBRARY_PATH=$WORKING_HOME/vendor/ghc-libs:/usr/lib:$LIBRARY_PATH
-# export LD_LIBRARY_PATH=$LIBRARY_PATH
-# export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$WORKING_HOME/vendor/ghc-utils/bin:$WORKING_HOME/.cabal-sandbox/bin:$PATH
-#
-# ########## GHC #####################################################
-# if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
-#   PREBUILT_GHC_URL=$PREBUILT/heroku-ghc-$GHC_VER.tar.gz
-#   if curl --output /dev/null --silent --head --fail $PREBUILT_GHC_URL; then
-#     echo "-----> Installing prebuilt GHC $GHC_VER"
-#     curl -# -L $PREBUILT_GHC_URL | tar zx -C $WORKING_HOME/vendor
-#   else
-#     echo "-----> Could not find prebuilt GHC $GHC_VER"
-#     if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
-#       GHC_URL="https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz"
-#       echo "-----> Downloading GHC $GHC_URL"
-#       curl -# -L "$GHC_URL" | tar zx -C $CACHE_DIR/download
-#       # -o $CACHE_DIR/download/ghc.tar.xz
-#       # tar xfv $CACHE_DIR/download/ghc.tar.xz -C $CACHE_DIR/download
-#     fi
-#     echo "-----> Installing GHC $GHC_VER"
-#     cd $CACHE_DIR/download/ghc-$GHC_VER
-#     ./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
-#     make install
-#   fi
-#   echo "-----> Caching GHC $GHC_VER binaries"
-#   cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
-# else
-#   echo "-----> Restoring cached GHC $GHC_VER binaries"
-#   rm -fr $WORKING_HOME/vendor/ghc-$GHC_VER
-#   cp -R $CACHE_DIR/ghc-$GHC_VER $WORKING_HOME/vendor
-# fi
-#
-# install_prebuilt "happy" "1.19.3"
-# install_prebuilt "alex" "3.1.3"
-# install_prebuilt "cpphs" "1.18.4"
-#
-# ########## cabal-install ###########################################
-# if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
-#   PREBUILT_CABAL_URL=$PREBUILT/heroku-cabal-install-$CABAL_VER.tar.gz
-#   if curl --output /dev/null --silent --head --fail $PREBUILT_CABAL_URL; then
-#     echo "-----> Installing prebuilt cabal-install $CABAL_VER"
-#     curl -# -L $PREBUILT_CABAL_URL | tar zx -C $WORKING_HOME/vendor
-#   else
-#     echo "-----> Could not find prebuilt cabal-install $CABAL_VER"
-#     if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
-#       CABAL_URL="https://downloads.haskell.org/~cabal/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz"
-#       echo "-----> Downloading cabal-install $CABAL_VER"
-#       curl -# -L "$CABAL_URL" | tar zx -C $CACHE_DIR/download
-#     fi
-#
-#     echo "-----> Installing cabal-install $CABAL_VER"
-#     cd $CACHE_DIR/download/cabal-install-$CABAL_VER
-#     export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
-#
-#     ./bootstrap.sh
-#   fi
-#
-#   echo "-----> Caching cabal $CABAL_VER binaries"
-#   cp -R $WORKING_HOME/vendor/cabal-install-$CABAL_VER $CACHE_DIR
-# else
-#   echo "-----> Restoring cached cabal $CABAL_VER binaries"
-#   cp -R $CACHE_DIR/cabal-install-$CABAL_VER $WORKING_HOME/vendor
-# fi
+mkdir -p $WORKING_HOME/vendor/ghc-libs
+mkdir -p $WORKING_HOME/vendor/ghc-utils
+mkdir -p $WORKING_HOME/vendor/ghc-includes
+echo "-----> Linking libncurses.so in an accessible place"
+ln -s /usr/lib/libncurses.so.5 $WORKING_HOME/vendor/ghc-libs/libtinfo.so.5
 
-########## project build ###########################################
+LIBFFI_URL="ftp://sourceware.org/pub/libffi/libffi-3.0.13.tar.gz"
+install_prebuilt_library "libffi" "3.0.13" $LIBFFI_URL "libffi-3.0.13" "--enable-static=no"
+if [ -e $CACHE_DIR/libffi-3.0.13/libs ]; then
+  echo "-----> Move libffi files into the correct locations" # See https://github.com/atgreen/libffi/issues/55 & https://github.com/atgreen/libffi/issues/24
+  rm -rf $CACHE_DIR/libffi-3.0.13/ghc-libs/*
+  mv $CACHE_DIR/libffi-3.0.13/libs/*.so* $CACHE_DIR/libffi-3.0.13/ghc-libs/
+  mv $CACHE_DIR/libffi-3.0.13/libs/*.h $CACHE_DIR/libffi-3.0.13/ghc-includes/
+  cp $CACHE_DIR/libffi-3.0.13/ghc-libs/* $WORKING_HOME/vendor/ghc-libs/
+  cp $CACHE_DIR/libffi-3.0.13/ghc-includes/* $WORKING_HOME/vendor/ghc-includes/
+  rm -rf $CACHE_DIR/libffi-3.0.13/libs
+fi
 
-# cd $WORKING_HOME
-# cabal sandbox init
-#
-# cd $BUILD_DIR
-# cabal sandbox init --sandbox $WORKING_HOME/.cabal-sandbox
-#
-# if [ -e $CACHE_DIR/.cabal-sandbox ]; then
-#   echo "-----> Restoring cached cabal sandbox"
-#   rm -fr $WORKING_HOME/.cabal-sandbox
-#   cp -R $CACHE_DIR/.cabal-sandbox $WORKING_HOME
-# fi
-#
-# echo "-----> Getting newest list of cabal packages"
-# if [ -e "$CABAL_INDEX" ]; then
-#     now="$(date +%s)"
-#     idx_date="$(date +%s -r "$CABAL_INDEX")"
-#     days="$(((now - idx_date) / 60 / 60 / 24))"
-#     if [ $days -gt 1 ]; then
-#         cabal update
-#     else
-#         echo "-----> Nevermind, it's not stale"
-#     fi
-# else
-#     cabal update
-# fi
+LIBPCRE_URL="http://iweb.dl.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.gz"
+install_prebuilt_library "libpcre" "8.35" $LIBPCRE_URL "pcre-8.35" "--enable-silent-rules --enable-static=no --disable-cpp"
 
-cabal update
+LIBGMP_URL="https://gmplib.org/download/gmp/gmp-6.0.0a.tar.bz2"
+install_prebuilt_library "libgmp" "6.0.0a" $LIBGMP_URL "gmp-6.0.0"
+
+export LANG=en_US.UTF-8
+export C_INCLUDE_PATH=$WORKING_HOME/vendor/ghc-includes:/usr/include:$C_INCLUDE_PATH
+export LIBRARY_PATH=$WORKING_HOME/vendor/ghc-libs:/usr/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$LIBRARY_PATH
+export PATH=$WORKING_HOME/vendor/ghc-$GHC_VER/bin:$WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin:$WORKING_HOME/vendor/ghc-utils/bin:$WORKING_HOME/.cabal-sandbox/bin:$PATH
+
+########## GHC #####################################################
+if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
+  PREBUILT_GHC_URL=$PREBUILT/heroku-ghc-$GHC_VER.tar.gz
+  if curl --output /dev/null --silent --head --fail $PREBUILT_GHC_URL; then
+    echo "-----> Installing prebuilt GHC $GHC_VER"
+    curl -# -L $PREBUILT_GHC_URL | tar zx -C $WORKING_HOME/vendor
+  else
+    echo "-----> Could not find prebuilt GHC $GHC_VER"
+    if [ ! -e $CACHE_DIR/download/ghc-$GHC_VER ]; then
+      GHC_URL="https://downloads.haskell.org/~ghc/$GHC_VER/ghc-$GHC_VER-x86_64-deb8-linux.tar.xz"
+      echo "-----> Downloading GHC $GHC_URL"
+      curl -# -L "$GHC_URL" | tar zx -C $CACHE_DIR/download
+      # -o $CACHE_DIR/download/ghc.tar.xz
+      # tar xfv $CACHE_DIR/download/ghc.tar.xz -C $CACHE_DIR/download
+    fi
+    echo "-----> Installing GHC $GHC_VER"
+    cd $CACHE_DIR/download/ghc-$GHC_VER
+    ./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
+    make install
+  fi
+  echo "-----> Caching GHC $GHC_VER binaries"
+  cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
+else
+  echo "-----> Restoring cached GHC $GHC_VER binaries"
+  rm -fr $WORKING_HOME/vendor/ghc-$GHC_VER
+  cp -R $CACHE_DIR/ghc-$GHC_VER $WORKING_HOME/vendor
+fi
+
+install_prebuilt "happy" "1.19.3"
+install_prebuilt "alex" "3.1.3"
+install_prebuilt "cpphs" "1.18.4"
+
+########## cabal-install ###########################################
+if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
+  PREBUILT_CABAL_URL=$PREBUILT/heroku-cabal-install-$CABAL_VER.tar.gz
+  if curl --output /dev/null --silent --head --fail $PREBUILT_CABAL_URL; then
+    echo "-----> Installing prebuilt cabal-install $CABAL_VER"
+    curl -# -L $PREBUILT_CABAL_URL | tar zx -C $WORKING_HOME/vendor
+  else
+    echo "-----> Could not find prebuilt cabal-install $CABAL_VER"
+    if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
+      CABAL_URL="https://downloads.haskell.org/~cabal/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz"
+      echo "-----> Downloading cabal-install $CABAL_VER"
+      curl -# -L "$CABAL_URL" | tar zx -C $CACHE_DIR/download
+    fi
+
+    echo "-----> Installing cabal-install $CABAL_VER"
+    cd $CACHE_DIR/download/cabal-install-$CABAL_VER
+    export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
+
+    ./bootstrap.sh
+  fi
+
+  echo "-----> Caching cabal $CABAL_VER binaries"
+  cp -R $WORKING_HOME/vendor/cabal-install-$CABAL_VER $CACHE_DIR
+else
+  echo "-----> Restoring cached cabal $CABAL_VER binaries"
+  cp -R $CACHE_DIR/cabal-install-$CABAL_VER $WORKING_HOME/vendor
+fi
+
+######### project build ###########################################
+
+cd $WORKING_HOME
+cabal v1-sandbox init
+
+cd $BUILD_DIR
+cabal v1-sandbox init --sandbox $WORKING_HOME/.cabal-sandbox
+
+if [ -e $CACHE_DIR/.cabal-sandbox ]; then
+  echo "-----> Restoring cached cabal sandbox"
+  rm -fr $WORKING_HOME/.cabal-sandbox
+  cp -R $CACHE_DIR/.cabal-sandbox $WORKING_HOME
+fi
+
+echo "-----> Getting newest list of cabal packages"
+if [ -e "$CABAL_INDEX" ]; then
+    now="$(date +%s)"
+    idx_date="$(date +%s -r "$CABAL_INDEX")"
+    days="$(((now - idx_date) / 60 / 60 / 24))"
+    if [ $days -gt 1 ]; then
+        cabal v1-update
+    else
+        echo "-----> Nevermind, it's not stale"
+    fi
+else
+    cabal v1-update
+fi
 
 cd $BUILD_DIR
 
 echo "-----> Installing user application"
-cabal new-configure --disable-library-profiling --disable-executable-profiling --disable-tests --disable-library-coverage --disable-benchmarks --enable-executable-stripping --disable-split-objs || true
+cabal v1-configure --disable-library-profiling --disable-executable-profiling --disable-tests --disable-library-coverage --disable-benchmarks --enable-executable-stripping --disable-split-objs || true
+# cabal configure --disable-library-profiling --disable-executable-profiling --disable-tests --disable-library-coverage --disable-benchmarks --enable-executable-stripping --disable-split-objs || true
 # cabal install --only-dependencies --reorder-goals --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-documentation --disable-split-objs
-cabal new-build # -j
+cabal v1-build -j
 
 # Set context environment variables.
 set-env PATH "/app/vendor/ghc-$GHC_VER/bin:/app/vendor/ghc-utils/bin:/app/vendor/cabal-install-$CABAL_VER/bin"':$PATH'
