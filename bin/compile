@@ -236,39 +236,40 @@ fi
 
 ######### project build ###########################################
 
-cd $WORKING_HOME
-cabal v1-sandbox init
+# cd $WORKING_HOME
+# cabal v1-sandbox init
+#
+# cd $BUILD_DIR
+# cabal v1-sandbox init --sandbox $WORKING_HOME/.cabal-sandbox
+#
+# if [ -e $CACHE_DIR/.cabal-sandbox ]; then
+#   echo "-----> Restoring cached cabal sandbox"
+#   rm -fr $WORKING_HOME/.cabal-sandbox
+#   cp -R $CACHE_DIR/.cabal-sandbox $WORKING_HOME
+# fi
+#
+# echo "-----> Getting newest list of cabal packages"
+# if [ -e "$CABAL_INDEX" ]; then
+#     now="$(date +%s)"
+#     idx_date="$(date +%s -r "$CABAL_INDEX")"
+#     days="$(((now - idx_date) / 60 / 60 / 24))"
+#     if [ $days -gt 1 ]; then
+#         cabal v1-update
+#     else
+#         echo "-----> Nevermind, it's not stale"
+#     fi
+# else
+#     cabal v1-update
+# fi
 
 cd $BUILD_DIR
-cabal v1-sandbox init --sandbox $WORKING_HOME/.cabal-sandbox
-
-if [ -e $CACHE_DIR/.cabal-sandbox ]; then
-  echo "-----> Restoring cached cabal sandbox"
-  rm -fr $WORKING_HOME/.cabal-sandbox
-  cp -R $CACHE_DIR/.cabal-sandbox $WORKING_HOME
-fi
-
-echo "-----> Getting newest list of cabal packages"
-if [ -e "$CABAL_INDEX" ]; then
-    now="$(date +%s)"
-    idx_date="$(date +%s -r "$CABAL_INDEX")"
-    days="$(((now - idx_date) / 60 / 60 / 24))"
-    if [ $days -gt 1 ]; then
-        cabal v1-update
-    else
-        echo "-----> Nevermind, it's not stale"
-    fi
-else
-    cabal v1-update
-fi
-
-cd $BUILD_DIR
+cabal update
 
 echo "-----> Installing user application"
-cabal v1-configure --disable-library-profiling --disable-executable-profiling --disable-tests --disable-library-coverage --disable-benchmarks --enable-executable-stripping --disable-split-objs || true
+cabal new-configure --disable-library-profiling --disable-executable-profiling --disable-tests --disable-library-coverage --disable-benchmarks --enable-executable-stripping --disable-split-objs || true
 # cabal configure --disable-library-profiling --disable-executable-profiling --disable-tests --disable-library-coverage --disable-benchmarks --enable-executable-stripping --disable-split-objs || true
 # cabal install --only-dependencies --reorder-goals --disable-library-profiling --disable-tests --disable-library-coverage --disable-benchmarks --disable-documentation --disable-split-objs
-cabal v1-build -j
+cabal new-build
 
 # Set context environment variables.
 set-env PATH "/app/vendor/ghc-$GHC_VER/bin:/app/vendor/ghc-utils/bin:/app/vendor/cabal-install-$CABAL_VER/bin"':$PATH'
