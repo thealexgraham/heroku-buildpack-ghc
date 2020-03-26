@@ -188,7 +188,7 @@ if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
       GHC_URL="https://downloads.haskell.org/~ghc/8.2.2/ghc-8.2.2-x86_64-deb8-linux.tar.xz"
       echo "-----> Downloading GHC $GHC_URL"
       curl -# -L "$GHC_URL" -o $CACHE_DIR/download/ghc.tar.xz
-      tar xz $CACHE_DIR/download/ghc.tar.xz -C $CACHE_DIR/download
+      tar xfv $CACHE_DIR/download/ghc.tar.xz -C $CACHE_DIR/download
     fi
     echo "-----> Installing GHC $GHC_VER"
     cd $CACHE_DIR/download/ghc-$GHC_VER
