@@ -9,6 +9,8 @@ BUILD_DIR="$1"
 CACHE_DIR="$2"
 ENV_DIR="$3"
 
+echo "$CACHE_DIR"
+
 # Default configuration which you can change by setting environment variables
 # e.g. heroku config:set CLEAR_CACHE=1
 GHC_VER=${GHC_VER:-8.2.2}
@@ -193,6 +195,7 @@ if [ ! -e $CACHE_DIR/ghc-$GHC_VER ]; then
     cd $CACHE_DIR/download/ghc-$GHC_VER
     ./configure --prefix $WORKING_HOME/vendor/ghc-$GHC_VER
     make install
+    rm $CACHE_DIR/download/ghc.tar.xz
   fi
   echo "-----> Caching GHC $GHC_VER binaries"
   cp -R $WORKING_HOME/vendor/ghc-$GHC_VER $CACHE_DIR
@@ -281,6 +284,7 @@ set-default-env LD_LIBRARY_PATH /app/vendor/ghc-libs:/usr/lib
 
 echo "-----> Cleaning any source downloads from the build cache"
 rm -fr $CACHE_DIR/download
+rm -fr $CACHE_DIR
 
 # echo "-----> Caching latest cabal sandbox"
 # rm -fr $CACHE_DIR/.cabal-sandbox
