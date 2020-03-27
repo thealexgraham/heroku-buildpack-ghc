@@ -230,9 +230,9 @@ if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
     # ./bootstrap.sh
     curl "https://downloads.haskell.org/~cabal/cabal-install-latest/cabal-install-3.0.0.0-x86_64-unknown-linux.tar.xz" -o $CACHE_DIR/download/cabal-install.tar.xz
     tar xfv $CACHE_DIR/download/cabal-install.tar.xz -C $CACHE_DIR/download
-    cp $CACHE_DIR/download/cabal $WORKING_HOME/vendor/cabal-install-$CABAL_VER
-    # mv $CACHE_DIR/download/cabal $WORKING_HOME/vendor
-    mv $CACHE_DIR/download/cabal /usr/local/bin
+    mkdir -p $WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin
+    mv $CACHE_DIR/download/cabal $WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin
+    # mv $CACHE_DIR/download/cabal /usr/local/bin
 
   fi
 
