@@ -293,7 +293,7 @@ rm -fr $CACHE_DIR/download
 # rm -fr $CACHE_DIR
 # rm $WORKING_HOME/.cabal/packages/hackage.haskell.org/00-index.tar
 # rm $WORKING_HOME/.cabal/packages/hackage.haskell.org/00-index.tar.gz
-rm -rf $WORKING_HOME/.cabal
+rm -rf $WORKING_HOME/.cabal/packages
 
 # echo "-----> Caching latest cabal sandbox"
 # rm -fr $CACHE_DIR/.cabal-sandbox
