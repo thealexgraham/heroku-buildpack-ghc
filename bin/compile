@@ -217,17 +217,21 @@ if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
     curl -# -L $PREBUILT_CABAL_URL | tar zx -C $WORKING_HOME/vendor
   else
     echo "-----> Could not find prebuilt cabal-install $CABAL_VER"
-    if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
-      CABAL_URL="https://downloads.haskell.org/~cabal/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz"
-      echo "-----> Downloading cabal-install $CABAL_VER"
-      curl -# -L "$CABAL_URL" | tar zx -C $CACHE_DIR/download
-    fi
+    # if [ ! -e $CACHE_DIR/download/cabal-install-$CABAL_VER ]; then
+    #   CABAL_URL="https://downloads.haskell.org/~cabal/cabal-install-$CABAL_VER/cabal-install-$CABAL_VER.tar.gz"
+    #   echo "-----> Downloading cabal-install $CABAL_VER"
+    #   curl -# -L "$CABAL_URL" | tar zx -C $CACHE_DIR/download
+    # fi
+    #
+    # echo "-----> Installing cabal-install $CABAL_VER"
+    # cd $CACHE_DIR/download/cabal-install-$CABAL_VER
+    # export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
+    #
+    # ./bootstrap.sh
+    curl "https://downloads.haskell.org/~cabal/cabal-install-latest/cabal-install-3.0.0.0-x86_64-unknown-linux.tar.xz" -o $CACHE_DIR/download/cabal-install.tar.xz
+    tar xf $CACHE_DIR/download/cabal-install.tar.xz
+    mv $CACHE_DIR/download/cabal $WORKING_HOME/vendor
 
-    echo "-----> Installing cabal-install $CABAL_VER"
-    cd $CACHE_DIR/download/cabal-install-$CABAL_VER
-    export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
-
-    ./bootstrap.sh
   fi
 
   echo "-----> Caching cabal $CABAL_VER binaries"
