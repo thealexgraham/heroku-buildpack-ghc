@@ -285,8 +285,9 @@ set-default-env LD_LIBRARY_PATH /app/vendor/ghc-libs:/usr/lib
 echo "-----> Cleaning any source downloads from the build cache"
 rm -fr $CACHE_DIR/download
 # rm -fr $CACHE_DIR
-rm $WORKING_HOME/.cabal/packages/hackage.haskell.org/00-index.tar
-rm $WORKING_HOME/.cabal/packages/hackage.haskell.org/00-index.tar.gz
+# rm $WORKING_HOME/.cabal/packages/hackage.haskell.org/00-index.tar
+# rm $WORKING_HOME/.cabal/packages/hackage.haskell.org/00-index.tar.gz
+rm -rf $WORKING_HOME/.cabal
 
 # echo "-----> Caching latest cabal sandbox"
 # rm -fr $CACHE_DIR/.cabal-sandbox
