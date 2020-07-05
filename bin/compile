@@ -228,7 +228,8 @@ if [ ! -e $CACHE_DIR/cabal-install-$CABAL_VER ]; then
     # export PREFIX=$WORKING_HOME/vendor/cabal-install-$CABAL_VER
     #
     # ./bootstrap.sh
-    curl "https://downloads.haskell.org/~cabal/cabal-install-latest/cabal-install-3.0.0.0-x86_64-unknown-linux.tar.xz" -o $CACHE_DIR/download/cabal-install.tar.xz
+    # curl "https://downloads.haskell.org/~cabal/cabal-install-latest/cabal-install-3.0.0.0-x86_64-unknown-linux.tar.xz" -o $CACHE_DIR/download/cabal-install.tar.xz
+    curl "https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz" -o $CACHE_DIR/download/cabal-install.tar.xz
     tar xfv $CACHE_DIR/download/cabal-install.tar.xz -C $CACHE_DIR/download
     mkdir -p $WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin
     mv $CACHE_DIR/download/cabal $WORKING_HOME/vendor/cabal-install-$CABAL_VER/bin
