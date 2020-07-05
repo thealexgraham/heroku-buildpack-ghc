@@ -1,3 +1,7 @@
+**Note:** This is a fork of https://github.com/begriffs/heroku-buildpack-ghc updated 
+to work with Cabal 3.0 and get the GHC and related packages from the newer versions of the
+Haskell download links.
+
 <img src="img/haskell.png" alt="Styleguide Rails Logo" align="left" />
 <img src="img/heroku.png" alt="Styleguide Rails Logo" align="left" />
 <br />
